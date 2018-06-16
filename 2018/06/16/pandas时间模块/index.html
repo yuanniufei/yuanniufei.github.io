@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,pandas," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="时间戳转 datetime查看日期是第几周根据周求日期pandas 生成时间序列时间偏移">
+<meta name="keywords" content="python,pandas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pandas时间处理">
+<meta property="og:url" content="http://yoursite.com/2018/06/16/pandas时间模块/index.html">
+<meta property="og:site_name" content="牛牛牛爱洗澡">
+<meta property="og:description" content="时间戳转 datetime查看日期是第几周根据周求日期pandas 生成时间序列时间偏移">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/06/16/pandas时间模块/media/15120147674903/15216202085676.jpg">
+<meta property="og:image" content="https://user-images.githubusercontent.com/18639406/38674999-f4f07292-3e88-11e8-8049-f8eba334ee04.png">
+<meta property="og:updated_time" content="2018-06-16T01:35:56.256Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pandas时间处理">
+<meta name="twitter:description" content="时间戳转 datetime查看日期是第几周根据周求日期pandas 生成时间序列时间偏移">
+<meta name="twitter:image" content="http://yoursite.com/2018/06/16/pandas时间模块/media/15120147674903/15216202085676.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/16/pandas时间模块/"/>
+
+
+
+
+
+  <title>pandas时间处理 | 牛牛牛爱洗澡</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">牛牛牛爱洗澡</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/16/pandas时间模块/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="niufeiy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="牛牛牛爱洗澡">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">pandas时间处理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-16T02:16:58+08:00">
+                2018-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/2018/" itemprop="url" rel="index">
+                    <span itemprop="name">2018</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/2018/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>时间戳转 datetime<br>查看日期是第几周<br>根据周求日期<br>pandas 生成时间序列<br>时间偏移</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="时间戳转-datetime"><a href="#时间戳转-datetime" class="headerlink" title="时间戳转 datetime"></a>时间戳转 datetime</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line">timstamp = int(time.time())</span><br><span class="line">datetime.datetime.utcfromtimestamp(timstamp)</span><br><span class="line"><span class="comment"># output utc datetime</span></span><br><span class="line"><span class="comment"># datetime.datetime(2017, 12, 1, 8, 13, 43)</span></span><br><span class="line"></span><br><span class="line">datetime.datetime.fromtimestamp(timstamp[, tz])</span><br><span class="line"><span class="comment"># output local datetime</span></span><br><span class="line"><span class="comment"># datetime.datetime(2017, 12, 1, 16, 13, 43)</span></span><br></pre></td></tr></table></figure>
+<h2 id="查看日期是第几周"><a href="#查看日期是第几周" class="headerlink" title="查看日期是第几周"></a>查看日期是第几周</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line">start_dt = datetime.datetime.strptime(<span class="string">'2017-12-05'</span>, <span class="string">'%Y-%m-%d'</span>)</span><br><span class="line">start_dt.isocalendar()[<span class="number">1</span>]</span><br><span class="line"><span class="comment"># Out[16]: 49</span></span><br></pre></td></tr></table></figure>
+<h2 id="根据周求日期"><a href="#根据周求日期" class="headerlink" title="根据周求日期"></a>根据周求日期</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">time.strptime(<span class="string">'2017480'</span>, <span class="string">'%Y%U%w'</span>) <span class="comment"># 2017年48周 周日</span></span><br><span class="line"></span><br><span class="line">datetime.weekday() <span class="comment"># 获取一周的第几天 [0, 6]</span></span><br><span class="line">datetime.isocalendar() <span class="comment"># 获取年、第几周[1, +oo]、第几天[1, 7]</span></span><br></pre></td></tr></table></figure>
+<h2 id="字符转换格式"><a href="#字符转换格式" class="headerlink" title="字符转换格式"></a>字符转换格式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">%a: 星期的简写。如 星期三为Web</span><br><span class="line">%A: 星期的全写。如 星期三为Wednesday</span><br><span class="line">%b: 月份的简写。如4月份为Apr</span><br><span class="line">%B: 月份的全写。如4月份为April</span><br><span class="line">%c: 日期时间的字符串表示。（如： 04/07/10 10:43:39）</span><br><span class="line">%d: 日在这个月中的天数（是这个月的第几天）</span><br><span class="line">%f: 微秒（范围[0,999999]）</span><br><span class="line">%H: 小时（24小时制，[0, 23]）</span><br><span class="line">%I: 小时（12小时制，[0, 11]）</span><br><span class="line">%j: 日在年中的天数 [001,366]（是当年的第几天）</span><br><span class="line">%m: 月份（[01,12]）</span><br><span class="line">%M: 分钟（[00,59]）</span><br><span class="line">%p: AM或者PM</span><br><span class="line">%S: 秒（范围为[00,61]，为什么不是[00, 59]，参考python手册~_~）</span><br><span class="line">%U: 周在当年的周数当年的第几周），星期天作为周的第一天</span><br><span class="line">%w: 今天在这周的天数，范围为[0, 6]，6表示星期天</span><br><span class="line">%W: 周在当年的周数（是当年的第几周），星期一作为周的第一天</span><br><span class="line">%x: 日期字符串（如：04/07/10）</span><br><span class="line">%X: 时间字符串（如：10:43:39）</span><br><span class="line">%y: 2个数字表示的年份</span><br><span class="line">%Y: 4个数字表示的年份</span><br><span class="line">%z: 与utc时间的间隔 （如果是本地时间，返回空字符串）</span><br><span class="line">%Z: 时区名称（如果是本地时间，返回空字符串）</span><br><span class="line">%%: %% =&gt; %</span><br></pre></td></tr></table></figure>
+<h2 id="pandas-日期"><a href="#pandas-日期" class="headerlink" title="pandas 日期"></a>pandas 日期</h2><h3 id="生成日期序列"><a href="#生成日期序列" class="headerlink" title="生成日期序列"></a>生成日期序列</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy ad np</span><br><span class="line"></span><br><span class="line">longer_ts = pd.Series(np.random.rand(<span class="number">1000</span>), index=pd.date_range(<span class="string">'1/1/2000'</span>, periods=<span class="number">1000</span>))</span><br><span class="line"><span class="comment"># In [70]: longer_ts['2001']</span></span><br><span class="line"><span class="comment"># Out[70]:</span></span><br><span class="line"><span class="comment"># 2001-01-01    0.822498</span></span><br><span class="line"><span class="comment"># 2001-01-02    0.455563</span></span><br><span class="line"><span class="comment"># 2001-01-03    0.845438</span></span><br><span class="line"><span class="comment"># 2001-01-04    0.924114</span></span><br><span class="line"><span class="comment"># 2001-01-05    0.287750</span></span><br><span class="line"><span class="comment"># 2001-01-06    0.535029</span></span><br><span class="line"><span class="comment">#...</span></span><br></pre></td></tr></table></figure>
+<h3 id="每隔一段时间时间切片"><a href="#每隔一段时间时间切片" class="headerlink" title="每隔一段时间时间切片"></a>每隔一段时间时间切片</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.date_range(<span class="string">'2000-01-01'</span>, periods=<span class="number">10</span>,  periods=<span class="number">10</span>, freq=<span class="string">'1h30min'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Out[116]:</span><br><span class="line">DatetimeIndex([&apos;2000-01-01 00:00:00&apos;, &apos;2000-01-01 01:30:00&apos;,</span><br><span class="line">               &apos;2000-01-01 03:00:00&apos;, &apos;2000-01-01 04:30:00&apos;,</span><br><span class="line">               &apos;2000-01-01 06:00:00&apos;, &apos;2000-01-01 07:30:00&apos;,</span><br><span class="line">               &apos;2000-01-01 09:00:00&apos;, &apos;2000-01-01 10:30:00&apos;,</span><br><span class="line">               &apos;2000-01-01 12:00:00&apos;, &apos;2000-01-01 13:30:00&apos;],</span><br><span class="line">              dtype=&apos;datetime64[ns]&apos;, freq=&apos;90T&apos;)</span><br></pre></td></tr></table></figure>
+<p><img src="media/15120147674903/15216202085676.jpg" alt=""></p>
+<h3 id="偏移"><a href="#偏移" class="headerlink" title="偏移"></a>偏移</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">123</span>]: ts</span><br><span class="line">Out[<span class="number">123</span>]:</span><br><span class="line"><span class="number">2000</span><span class="number">-01</span><span class="number">-31</span>    <span class="number">0.266391</span></span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-29</span>   <span class="number">-0.528959</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-31</span>   <span class="number">-1.013039</span></span><br><span class="line"><span class="number">2000</span><span class="number">-04</span><span class="number">-30</span>   <span class="number">-1.206905</span></span><br><span class="line">Freq: M, dtype: float64</span><br><span class="line"></span><br><span class="line">In [<span class="number">124</span>]: ts.shift(<span class="number">1</span>, freq=<span class="string">'90T'</span>)</span><br><span class="line">     ...:</span><br><span class="line">Out[<span class="number">124</span>]:</span><br><span class="line"><span class="number">2000</span><span class="number">-01</span><span class="number">-31</span> <span class="number">01</span>:<span class="number">30</span>:<span class="number">00</span>    <span class="number">0.266391</span></span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-29</span> <span class="number">01</span>:<span class="number">30</span>:<span class="number">00</span>   <span class="number">-0.528959</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-31</span> <span class="number">01</span>:<span class="number">30</span>:<span class="number">00</span>   <span class="number">-1.013039</span></span><br><span class="line"><span class="number">2000</span><span class="number">-04</span><span class="number">-30</span> <span class="number">01</span>:<span class="number">30</span>:<span class="number">00</span>   <span class="number">-1.206905</span></span><br><span class="line">Freq: M, dtype: float64</span><br><span class="line"></span><br><span class="line">In [<span class="number">125</span>]: ts.shift(<span class="number">2</span>)</span><br><span class="line">Out[<span class="number">125</span>]:</span><br><span class="line"><span class="number">2000</span><span class="number">-01</span><span class="number">-31</span>         NaN</span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-29</span>         NaN</span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-31</span>    <span class="number">0.266391</span></span><br><span class="line"><span class="number">2000</span><span class="number">-04</span><span class="number">-30</span>   <span class="number">-0.528959</span></span><br><span class="line">Freq: M, dtype: float64</span><br><span class="line"></span><br><span class="line">In [<span class="number">126</span>]: ts.shift(<span class="number">2</span>, freq=<span class="string">'M'</span>)</span><br><span class="line">Out[<span class="number">126</span>]:</span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-31</span>    <span class="number">0.266391</span></span><br><span class="line"><span class="number">2000</span><span class="number">-04</span><span class="number">-30</span>   <span class="number">-0.528959</span></span><br><span class="line"><span class="number">2000</span><span class="number">-05</span><span class="number">-31</span>   <span class="number">-1.013039</span></span><br><span class="line"><span class="number">2000</span><span class="number">-06</span><span class="number">-30</span>   <span class="number">-1.206905</span></span><br><span class="line">Freq: M, dtype: float64</span><br><span class="line"></span><br><span class="line">In [<span class="number">127</span>]: ts.shift(<span class="number">3</span>, freq=<span class="string">'D'</span>)</span><br><span class="line">Out[<span class="number">127</span>]:</span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-03</span>    <span class="number">0.266391</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-03</span>   <span class="number">-0.528959</span></span><br><span class="line"><span class="number">2000</span><span class="number">-04</span><span class="number">-03</span>   <span class="number">-1.013039</span></span><br><span class="line"><span class="number">2000</span><span class="number">-05</span><span class="number">-03</span>   <span class="number">-1.206905</span></span><br><span class="line">dtype: float64</span><br></pre></td></tr></table></figure>
+<h3 id="按月求平均"><a href="#按月求平均" class="headerlink" title="按月求平均"></a>按月求平均</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">128</span>]: ts = pd.Series(np.random.randn(<span class="number">20</span>),</span><br><span class="line">     ...:                index=pd.date_range(<span class="string">'1/15/2000'</span>, periods=<span class="number">20</span>, freq=<span class="string">'4d'</span>))</span><br><span class="line">     ...: ts</span><br><span class="line">     ...:</span><br><span class="line">Out[<span class="number">128</span>]:</span><br><span class="line"><span class="number">2000</span><span class="number">-01</span><span class="number">-15</span>   <span class="number">-0.209952</span></span><br><span class="line"><span class="number">2000</span><span class="number">-01</span><span class="number">-19</span>    <span class="number">0.226069</span></span><br><span class="line"><span class="number">2000</span><span class="number">-01</span><span class="number">-23</span>    <span class="number">0.346459</span></span><br><span class="line"><span class="number">2000</span><span class="number">-01</span><span class="number">-27</span>    <span class="number">0.307560</span></span><br><span class="line"><span class="number">2000</span><span class="number">-01</span><span class="number">-31</span>   <span class="number">-0.749712</span></span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-04</span>   <span class="number">-1.241700</span></span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-08</span>    <span class="number">0.827360</span></span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-12</span>    <span class="number">1.157611</span></span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-16</span>   <span class="number">-0.303152</span></span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-20</span>    <span class="number">0.703649</span></span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-24</span>    <span class="number">2.449799</span></span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-28</span>   <span class="number">-1.470502</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-03</span>   <span class="number">-0.311032</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-07</span>    <span class="number">0.698538</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-11</span>    <span class="number">0.171358</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-15</span>   <span class="number">-1.328993</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-19</span>    <span class="number">0.346595</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-23</span>   <span class="number">-0.681117</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-27</span>   <span class="number">-0.000089</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-31</span>    <span class="number">1.598276</span></span><br><span class="line">Freq: <span class="number">4</span>D, dtype: float64</span><br><span class="line"></span><br><span class="line">In [<span class="number">129</span>]: ts.resample(<span class="string">'M'</span>).mean()</span><br><span class="line">     ...:</span><br><span class="line">Out[<span class="number">129</span>]:</span><br><span class="line"><span class="number">2000</span><span class="number">-01</span><span class="number">-31</span>   <span class="number">-0.015915</span></span><br><span class="line"><span class="number">2000</span><span class="number">-02</span><span class="number">-29</span>    <span class="number">0.303295</span></span><br><span class="line"><span class="number">2000</span><span class="number">-03</span><span class="number">-31</span>    <span class="number">0.061692</span></span><br><span class="line">Freq: M, dtype: float64</span><br></pre></td></tr></table></figure>
+<p><img src="https://user-images.githubusercontent.com/18639406/38674999-f4f07292-3e88-11e8-8049-f8eba334ee04.png" alt="image"></p>
+<h3 id="根据第几周求日期"><a href="#根据第几周求日期" class="headerlink" title="根据第几周求日期"></a>根据第几周求日期</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line">datetime.datetime.strptime(str(date_list[idx][<span class="number">0</span>]) + str(data[<span class="number">0</span>]) + <span class="string">'0'</span>, <span class="string">'%Y%W%w'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="根据日期求是第几周"><a href="#根据日期求是第几周" class="headerlink" title="根据日期求是第几周"></a>根据日期求是第几周</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">date = <span class="string">'2018-1-1'</span></span><br><span class="line"></span><br><span class="line">year = date.isocalendar()[<span class="number">0</span>]</span><br><span class="line">week = date.isocalendar()[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/pandas/" rel="tag"># pandas</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/16/字符串实现大数相加/" rel="next" title="字符串模拟两个大数相加(python实现)">
+                <i class="fa fa-chevron-left"></i> 字符串模拟两个大数相加(python实现)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/16/markdown/" rel="prev" title="Markdown 语法和 MWeb 写作使用说明">
+                Markdown 语法和 MWeb 写作使用说明 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">niufeiy</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/3436763122" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yuanniufei" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:niufeiy@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/109576308041804327020" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/niufeiye" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/profile.php?id=100022431348715" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#时间戳转-datetime"><span class="nav-number">1.</span> <span class="nav-text">时间戳转 datetime</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看日期是第几周"><span class="nav-number">2.</span> <span class="nav-text">查看日期是第几周</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据周求日期"><span class="nav-number">3.</span> <span class="nav-text">根据周求日期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符转换格式"><span class="nav-number">4.</span> <span class="nav-text">字符转换格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pandas-日期"><span class="nav-number">5.</span> <span class="nav-text">pandas 日期</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成日期序列"><span class="nav-number">5.1.</span> <span class="nav-text">生成日期序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#每隔一段时间时间切片"><span class="nav-number">5.2.</span> <span class="nav-text">每隔一段时间时间切片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#偏移"><span class="nav-number">5.3.</span> <span class="nav-text">偏移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按月求平均"><span class="nav-number">5.4.</span> <span class="nav-text">按月求平均</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据第几周求日期"><span class="nav-number">5.5.</span> <span class="nav-text">根据第几周求日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据日期求是第几周"><span class="nav-number">5.6.</span> <span class="nav-text">根据日期求是第几周</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">niufeiy</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
