@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="牛牛牛爱洗澡">
 <meta property="og:description" content="MacOS 安装 Hadoop &amp;amp; Hbase 过程  Hadoop: 2.8.2Hbase: 1.2.6">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-08T09:39:44.319Z">
+<meta property="og:updated_time" content="2018-08-08T09:42:47.768Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hadoop &amp; hbase install">
 <meta name="twitter:description" content="MacOS 安装 Hadoop &amp;amp; Hbase 过程  Hadoop: 2.8.2Hbase: 1.2.6">
@@ -426,6 +426,7 @@
 </ol>
 <h2 id="ERROR"><a href="#ERROR" class="headerlink" title="ERROR"></a>ERROR</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: The node /hbase is not in ZooKeeper. It should have been written by the master. Check the value configured in &apos;zookeeper.znode.parent&apos;. There could be a mismatch with the one configured in the master.</span><br></pre></td></tr></table></figure>
 <p>原因是端口被占用，需要把自己安装的zookeeper关闭，用hbase自带的</p>
+<p><a href="http://localhost:8042/node" target="_blank" rel="noopener">http://localhost:8042/node</a><br><a href="http://localhost:8088/cluster" target="_blank" rel="noopener">http://localhost:8088/cluster</a><br><a href="http://localhost:50070/dfshealth.html#tab-overview" target="_blank" rel="noopener">http://localhost:50070/dfshealth.html#tab-overview</a></p>
 
       
     </div>
